@@ -60,8 +60,8 @@ public class DVD {
             if (xPos+picWidth>=widht-10||xPos<0){
 
                 int [] color = getRandomColor();
-                xVelocity *= -1;
-                xVelocity += -xPos/Math.abs(xPos);
+                //xVelocity = -xVelocity*xPos/Math.abs(xPos);
+                xVelocity +=-xPos/Math.abs(xPos);
                 WritableRaster raster0 = basedImg.getRaster();
                 img = new BufferedImage(picWidth,picHeight,basedImg.getType());
                 WritableRaster raster = img.getRaster();
@@ -79,10 +79,8 @@ public class DVD {
                     System.out.println(yVelocity);
                 int [] color = getRandomColor();
 
-                yVelocity *= -1;
+                //yVelocity = yVelocity*(-1*yPos/Math.abs(yPos));
                 yVelocity = yVelocity-1*yPos/Math.abs(yPos);
-                if(yPos<0)
-                    System.out.println(yVelocity+ " " + yPos);
                 WritableRaster raster0 = basedImg.getRaster();
                 img = new BufferedImage(picWidth,picHeight,basedImg.getType());
                 WritableRaster raster = img.getRaster();
@@ -122,6 +120,14 @@ public class DVD {
             }
         });
         timer.start();
+        Timer timer1 = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.xVelocity+= panel.xVelocity/Math.abs(panel.xVelocity);
+                panel.yVelocity+= panel.yVelocity/Math.abs(panel.yVelocity);
+            }
+        });
+        timer1.start();
     }
 
     public static void main(String[] args) {
