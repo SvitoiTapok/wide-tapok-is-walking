@@ -3,14 +3,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 public class Main {
     private int height = 800;
-    private int widht = 1600;
-    class MyPanel extends JPanel{
+    private int widht = 1500;
+    private class MyPanel extends JPanel{
         private double ratio = (double) widht/height;
         private BufferedImage img;
         private int yPos = -180;
@@ -18,6 +21,7 @@ public class Main {
         private int PicWidth;
         private int xPos = (int)(ratio*yPos);
         MyPanel() {
+            this.addMouseMotionListener(new MouseMover());
             try {
                 img = ImageIO.read(new File("src/imgs/tapok.jpg"));
                 PicHeight = img.getHeight();
@@ -28,8 +32,12 @@ public class Main {
         }
         @Override
         protected void paintComponent(Graphics g) {
-            xPos+=3;
-            yPos += 5;
+            // you can setup any bias, for example:
+            // xPos +=3;
+            // yPos +=5;
+            Random r = new Random();
+            xPos+=r.nextInt(-10,10);
+            yPos+=r.nextInt(-10,10);
             if(yPos>=height)
                 yPos=0;
             if(xPos>=widht){
@@ -58,6 +66,14 @@ public class Main {
 
 
         }
+        class MouseMover extends MouseMotionAdapter{
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                xPos = e.getX();
+                yPos = e.getY();
+            }
+        }
+
     }
     public Main(){
         JFrame fr = new JFrame();
@@ -71,7 +87,6 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 panel.repaint();
-
             }
         });
         timer.start();
